@@ -16,7 +16,9 @@ from langchain_openai import OpenAIEmbeddings
 
 
 # Default chunking parameters
-DEFAULT_CHUNK_SIZE = 1000
+# Increased chunk size from 1000 to 1500 for better context retention in
+# scientific papers, which tend to have longer, denser paragraphs.
+DEFAULT_CHUNK_SIZE = 1500
 DEFAULT_CHUNK_OVERLAP = 150
 
 
@@ -100,18 +102,4 @@ def process_pdf(
     chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
     embeddings: Optional[OpenAIEmbeddings] = None,
 ) -> FAISS:
-    """End-to-end pipeline: load, split, and embed a PDF into a vector store.
-
-    Args:
-        file_path: Path to the PDF file.
-        chunk_size: Characters per chunk for the text splitter.
-        chunk_overlap: Overlap between consecutive chunks.
-        embeddings: Optional embeddings model instance.
-
-    Returns:
-        FAISS vector store populated with the document's content.
-    """
-    documents = load_pdf(file_path)
-    chunks = split_documents(documents, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    vectorstore = build_vectorstore(chunks, embeddings=embeddings)
-    return vectorstore
+    """End-to-end pipeline: load
