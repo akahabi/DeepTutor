@@ -38,7 +38,7 @@ QA_PROMPT = PromptTemplate(
 def build_qa_chain(
     llm: BaseLLM,
     vectorstore: VectorStore,
-    top_k: int = 5,
+    top_k: int = 4,  # reduced from 5 -- 4 chunks feels like a better balance for speed vs. context
     chain_type: str = "stuff",
 ) -> RetrievalQA:
     """Build a RetrievalQA chain for answering questions about documents.
@@ -98,19 +98,4 @@ def run_qa(
         sources = [
             {
                 "page": doc.metadata.get("page", "N/A"),
-                "source": doc.metadata.get("source", "unknown"),
-                "snippet": doc.page_content[:200],
-            }
-            for doc in source_docs
-        ]
-
-        logger.debug("QA answer generated, %d sources retrieved.", len(sources))
-        return {"answer": answer, "sources": sources, "error": None}
-
-    except Exception as exc:  # pylint: disable=broad-except
-        logger.error("Error during QA inference: %s", exc, exc_info=True)
-        return {
-            "answer": "",
-            "sources": [],
-            "error": f"An error occurred while processing your question: {exc}",
-        }
+          
