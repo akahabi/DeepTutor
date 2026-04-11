@@ -18,8 +18,10 @@ from langchain_openai import OpenAIEmbeddings
 # Default chunking parameters
 # Increased chunk size from 1000 to 1500 for better context retention in
 # scientific papers, which tend to have longer, denser paragraphs.
+# Note: bumped overlap from 150 to 200 to reduce context loss at chunk
+# boundaries — noticed some equations and figure references getting cut off.
 DEFAULT_CHUNK_SIZE = 1500
-DEFAULT_CHUNK_OVERLAP = 150
+DEFAULT_CHUNK_OVERLAP = 200
 
 
 def compute_file_hash(file_path: str) -> str:
@@ -99,7 +101,4 @@ def build_vectorstore(
 def process_pdf(
     file_path: str,
     chunk_size: int = DEFAULT_CHUNK_SIZE,
-    chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
-    embeddings: Optional[OpenAIEmbeddings] = None,
-) -> FAISS:
-    """End-to-end pipeline: load
+   
