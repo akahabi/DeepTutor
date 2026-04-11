@@ -73,10 +73,12 @@ def render_sidebar():
 
         # Added a slider to control how many source chunks are retrieved per query.
         # Default of 5 felt like too much noise; 3 gives cleaner, more focused answers.
+        # Bumping max to 15 — useful when reviewing dense technical papers where
+        # broader context across sections actually helps.
         st.slider(
             "Retrieved Chunks",
             min_value=1,
-            max_value=10,
+            max_value=15,
             value=3,
             key="top_k",
             help="Number of document chunks retrieved to answer each question",
@@ -91,15 +93,4 @@ def render_main_content():
     """Render the main chat interface."""
     st.title("DeepTutor Chat")
 
-    if st.session_state.uploaded_file is None:
-        # Welcome screen
-        st.info(
-            "👈 **Get started by uploading a PDF document** in the sidebar.\n\n"
-            "DeepTutor will help you understand and learn from your documents "
-            "through interactive Q&A."
-        )
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("📄 Documents Supported", "PDF")
-        with col2:
-        
+    if st.session_state.uplo
