@@ -71,6 +71,17 @@ def render_sidebar():
             help="Choose how DeepTutor responds to your questions",
         )
 
+        # Added a slider to control how many source chunks are retrieved per query.
+        # Default of 5 felt like too much noise; 3 gives cleaner, more focused answers.
+        st.slider(
+            "Retrieved Chunks",
+            min_value=1,
+            max_value=10,
+            value=3,
+            key="top_k",
+            help="Number of document chunks retrieved to answer each question",
+        )
+
         st.divider()
         st.caption("DeepTutor v1.0.0")
         st.caption("Fork of [HKUDS/DeepTutor](https://github.com/HKUDS/DeepTutor)")
@@ -91,10 +102,4 @@ def render_main_content():
         with col1:
             st.metric("📄 Documents Supported", "PDF")
         with col2:
-            st.metric("🧠 AI Models", "Multiple")
-        with col3:
-            st.metric("💬 Interaction Mode", "Chat")
-        return
-
-    # Display current document info
-    st.c
+        
