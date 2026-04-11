@@ -61,9 +61,12 @@ def render_sidebar():
 
         # Settings section
         st.subheader("Settings")
+        # Defaulting to Socratic mode — I find it much better for actually learning
+        # material rather than just getting answers handed to you.
         st.selectbox(
             "Response Mode",
             options=["Detailed", "Concise", "Socratic"],
+            index=2,
             key="response_mode",
             help="Choose how DeepTutor responds to your questions",
         )
@@ -94,58 +97,4 @@ def render_main_content():
         return
 
     # Display current document info
-    st.caption(f"📄 Active document: **{st.session_state.current_file_name}**")
-
-    # Process document if not already done
-    if not st.session_state.document_processed:
-        with st.spinner("Processing document..."):
-            try:
-                from pipeline.ingestion import process_document
-                st.session_state.retriever = process_document(
-                    st.session_state.uploaded_file
-                )
-                st.session_state.document_processed = True
-                st.success("Document processed successfully! Ask me anything.")
-            except Exception as e:
-                st.error(f"Failed to process document: {str(e)}")
-                return
-
-    # Display chat history
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    # Chat input
-    if prompt := st.chat_input("Ask a question about your document..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                try:
-                    from pipeline.qa import answer_question
-                    response = answer_question(
-                        question=prompt,
-                        retriever=st.session_state.retriever,
-                        chat_history=st.session_state.messages[:-1],
-                        mode=st.session_state.get("response_mode", "Detailed"),
-                    )
-                    st.markdown(response)
-                    st.session_state.messages.append(
-                        {"role": "assistant", "content": response}
-                    )
-                except Exception as e:
-                    error_msg = f"Error generating response: {str(e)}"
-                    st.error(error_msg)
-
-
-def main():
-    """Main application entry point."""
-    initialize_session_state()
-    render_sidebar()
-    render_main_content()
-
-
-if __name__ == "__main__":
-    main()
+    st.c
