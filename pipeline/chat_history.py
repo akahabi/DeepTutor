@@ -32,12 +32,14 @@ class ChatHistory:
     into prompts compatible with LangChain QA chains.
     """
 
-    def __init__(self, max_turns: int = 10):
+    def __init__(self, max_turns: int = 20):
         """Initialize chat history.
 
         Args:
             max_turns: Maximum number of conversation turns to retain.
                        Older messages are dropped to stay within context limits.
+                       Increased from 10 to 20 to retain more context for
+                       longer study sessions.
         """
         self._messages: List[Message] = []
         self.max_turns = max_turns
@@ -91,18 +93,5 @@ class ChatHistory:
         return list(self._messages)
 
     def clear(self) -> None:
-        """Clear all messages from history."""
+        """Clear all messages from the history."""
         self._messages = []
-
-    def last_assistant_message(self) -> Optional[str]:
-        """Return the most recent assistant message, if any."""
-        for msg in reversed(self._messages):
-            if msg.role == "assistant":
-                return msg.content
-        return None
-
-    def __len__(self) -> int:
-        return len(self._messages)
-
-    def __repr__(self) -> str:
-        return f"ChatHistory(messages={len(self._messages)}, max_turns={self.max_turns})"
