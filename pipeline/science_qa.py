@@ -38,7 +38,9 @@ QA_PROMPT = PromptTemplate(
 def build_qa_chain(
     llm: BaseLLM,
     vectorstore: VectorStore,
-    top_k: int = 4,  # reduced from 5 -- 4 chunks feels like a better balance for speed vs. context
+    # Bumped top_k from 4 to 5 -- in my testing, 5 chunks gives noticeably better
+    # answers for longer papers without a meaningful speed hit on my machine.
+    top_k: int = 5,
     chain_type: str = "stuff",
 ) -> RetrievalQA:
     """Build a RetrievalQA chain for answering questions about documents.
@@ -96,6 +98,3 @@ def run_qa(
         source_docs = result.get("source_documents", [])
 
         sources = [
-            {
-                "page": doc.metadata.get("page", "N/A"),
-          
