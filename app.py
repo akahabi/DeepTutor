@@ -84,13 +84,16 @@ def render_sidebar():
             help="Number of document chunks retrieved to answer each question",
         )
 
+        # Toggle to show/hide the source excerpts inline with answers.
+        # I keep this off by default — the excerpts can clutter the chat view
+        # and I usually only want them when debugging retrieval quality.
+        st.toggle(
+            "Show Source Excerpts",
+            value=False,
+            key="show_sources",
+            help="Display the retrieved document chunks alongside each answer",
+        )
+
         st.divider()
         st.caption("DeepTutor v1.0.0")
         st.caption("Fork of [HKUDS/DeepTutor](https://github.com/HKUDS/DeepTutor)")
-
-
-def render_main_content():
-    """Render the main chat interface."""
-    st.title("DeepTutor Chat")
-
-    if st.session_state.uplo
