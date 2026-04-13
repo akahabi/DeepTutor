@@ -71,7 +71,10 @@ def split_documents(
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
-        separators=["\n\n", "\n", ". ", " ", ""],
+        # Added ". " before " " so sentence boundaries are preferred over
+        # mid-word splits. Also added "\n\n\n" to catch triple newlines that
+        # sometimes appear in scanned/OCR'd PDFs between sections.
+        separators=["\n\n\n", "\n\n", "\n", ". ", " ", ""],
     )
     chunks = splitter.split_documents(documents)
     return chunks
@@ -96,9 +99,3 @@ def build_vectorstore(
 
     vectorstore = FAISS.from_documents(chunks, embeddings)
     return vectorstore
-
-
-def process_pdf(
-    file_path: str,
-    chunk_size: int = DEFAULT_CHUNK_SIZE,
-   
