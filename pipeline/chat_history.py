@@ -89,9 +89,16 @@ class ChatHistory:
         return pairs
 
     def get_messages(self) -> List[Message]:
-        """Return a copy of all stored messages."""
+        """Return a copy of all stored messages.
+
+        Returns a shallow copy so callers cannot mutate internal state.
+        """
         return list(self._messages)
 
     def clear(self) -> None:
         """Clear all messages from the history."""
         self._messages = []
+
+    def __len__(self) -> int:
+        """Return the total number of messages (not turns) in history."""
+        return len(self._messages)
