@@ -82,16 +82,9 @@ def split_documents(
         chunk_overlap=chunk_overlap,
         # Added ". " before " " so sentence boundaries are preferred over
         # mid-word splits. Also added "\n\n\n" to catch triple newlines that
-        # sometimes appear in scanned/OCR'd PDFs between sections.
-        separators=["\n\n\n", "\n\n", "\n", ". ", " ", ""],
-        # Strip whitespace from chunk edges to avoid leading/trailing spaces
-        # showing up in embeddings — noticed this causing subtle similarity
-        # score issues when chunks started with a stray newline or space.
-        strip_whitespace=True,
+        # sometimes appear in scanned/OCR PDFs between sections.
+        # Personal note: adding "Fig." and "et al." as separators caused more
+        # problems than it solved — skipping that idea.
+        separators=["\n\n\n", "\n\n", ". ", "\n", " ", ""],
     )
-    chunks = splitter.split_documents(documents)
-    return chunks
-
-
-def build_vectorstore(
-    chunks: List[Document],
+    return splitter.split_documents(documents)
