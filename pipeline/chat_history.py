@@ -91,7 +91,8 @@ class ChatHistory:
     def get_messages(self) -> List[Message]:
         """Return a copy of all stored messages.
 
-        Returns a shallow copy so callers cannot mutate internal state.
+        Returns a shallow copy so callers cannot accidentally mutate
+        the internal message list.
         """
         return list(self._messages)
 
@@ -100,5 +101,5 @@ class ChatHistory:
         self._messages = []
 
     def __len__(self) -> int:
-        """Return the total number of messages (not turns) in history."""
+        """Return the number of messages currently stored."""
         return len(self._messages)
