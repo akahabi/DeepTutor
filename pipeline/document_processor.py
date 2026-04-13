@@ -20,6 +20,8 @@ from langchain_openai import OpenAIEmbeddings
 # scientific papers, which tend to have longer, denser paragraphs.
 # Note: bumped overlap from 150 to 200 to reduce context loss at chunk
 # boundaries — noticed some equations and figure references getting cut off.
+# Personal note: tried 1800/250 on a few ML papers and it felt like too much
+# redundancy in retrieved chunks, so sticking with 1500/200 for now.
 DEFAULT_CHUNK_SIZE = 1500
 DEFAULT_CHUNK_OVERLAP = 200
 
@@ -44,12 +46,19 @@ def load_pdf(file_path: str) -> List[Document]:
 
     Raises:
         FileNotFoundError: If the PDF does not exist at the given path.
+        ValueError: If the loaded PDF contains no pages.
     """
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"PDF not found: {file_path}")
 
     loader = PyMuPDFLoader(file_path)
     documents = loader.load()
+
+    # Guard against empty PDFs (e.g. scanned docs where OCR produced nothing).
+    # Better to fail loudly here than get a confusing empty vectorstore later.
+    if not documents:
+        raise ValueError(f"PDF loaded but contains no extractable text: {file_path}")
+
     return documents
 
 
@@ -86,11 +95,3 @@ def split_documents(
 
 def build_vectorstore(
     chunks: List[Document],
-    embeddings: Optional[OpenAIEmbeddings] = None,
-) -> FAISS:
-    """Build a FAISS vector store from document chunks.
-
-    Args:
-        chunks: Chunked Document objects to embed and index.
-        embeddings: Optional pre-instantiated embeddings model.
-    
