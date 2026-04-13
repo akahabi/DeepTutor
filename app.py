@@ -85,12 +85,12 @@ def render_sidebar():
         )
 
         # Toggle to show/hide the source excerpts inline with answers.
-        # Defaulting to True now — after using this for a while I've found it
-        # really helpful to see exactly which passage the answer came from,
-        # especially when cross-checking claims in academic papers.
+        # Defaulting to True now — after using this for a while I realized it's
+        # really helpful to see exactly where the answer is coming from, especially
+        # when cross-referencing dense papers. Easy to turn off if distracting.
         st.toggle(
             "Show Source Excerpts",
             value=True,
             key="show_sources",
-            help="Display the document excerpts used to generate each answer",
+            help="Display the source document excerpts used to generate each answer",
         )
