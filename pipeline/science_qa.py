@@ -40,7 +40,8 @@ def build_qa_chain(
     vectorstore: VectorStore,
     # Bumped top_k from 4 to 5 -- in my testing, 5 chunks gives noticeably better
     # answers for longer papers without a meaningful speed hit on my machine.
-    top_k: int = 5,
+    # Trying 6 here -- found that dense methodology sections benefit from the extra chunk.
+    top_k: int = 6,
     chain_type: str = "stuff",
 ) -> RetrievalQA:
     """Build a RetrievalQA chain for answering questions about documents.
@@ -95,6 +96,3 @@ def run_qa(
     try:
         result = qa_chain.invoke({"query": question})
         answer = result.get("result", "").strip()
-        source_docs = result.get("source_documents", [])
-
-        sources = [
