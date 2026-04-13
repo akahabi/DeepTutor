@@ -75,6 +75,10 @@ def split_documents(
         # mid-word splits. Also added "\n\n\n" to catch triple newlines that
         # sometimes appear in scanned/OCR'd PDFs between sections.
         separators=["\n\n\n", "\n\n", "\n", ". ", " ", ""],
+        # Strip whitespace from chunk edges to avoid leading/trailing spaces
+        # showing up in embeddings — noticed this causing subtle similarity
+        # score issues when chunks started with a stray newline or space.
+        strip_whitespace=True,
     )
     chunks = splitter.split_documents(documents)
     return chunks
@@ -89,13 +93,4 @@ def build_vectorstore(
     Args:
         chunks: Chunked Document objects to embed and index.
         embeddings: Optional pre-instantiated embeddings model.
-                    Defaults to OpenAIEmbeddings if not provided.
-
-    Returns:
-        A FAISS vector store ready for similarity search.
-    """
-    if embeddings is None:
-        embeddings = OpenAIEmbeddings()
-
-    vectorstore = FAISS.from_documents(chunks, embeddings)
-    return vectorstore
+    
