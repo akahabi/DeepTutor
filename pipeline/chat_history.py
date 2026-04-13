@@ -91,7 +91,7 @@ class ChatHistory:
     def get_messages(self) -> List[Message]:
         """Return a copy of all stored messages.
 
-        Returns a shallow copy so callers cannot accidentally mutate
+        Returns a shallow copy so callers can't accidentally mutate
         the internal message list.
         """
         return list(self._messages)
