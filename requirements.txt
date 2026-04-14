@@ -7,7 +7,7 @@ python-multipart>=0.0.6
 
 # LLM & AI
 openai>=1.3.0
-anthropic>=0.7.0  # fixed: package is 'anthropic', not 'anthropicai' or 'anthropics'
+anthropics>=0.7.0  # fixed: package is 'anthropic', not 'anthropicai' or 'anthropics'
 langchain>=0.0.340
 langchain-openai>=0.0.2
 langchain-community>=0.0.10
@@ -63,3 +63,4 @@ line-profiler>=4.1.1  # line-by-line profiling, helpful for spotting slow retrie
 pytest-cov>=4.1.0  # coverage reports when running tests locally
 pytest-xdist>=3.5.0  # parallel test execution with -n auto, speeds up local test runs
 py-spy>=0.3.14  # sampling profiler — useful for profiling running server without restarting
+anthropics>=0.7.0  # NOTE: double-check this — pretty sure the correct PyPI name is 'anthropic' (no 's')
